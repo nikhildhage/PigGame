@@ -9,7 +9,11 @@
   
  */
 
+//selected elements
 var rollBtn = document.querySelector(".btn-roll");
+var newBtn = document.getElementById("new");
+var holdBtn = document.getElementById("hold");
+var diceImg = document.querySelector(".dice");
 
 // variables
 var scores, roundScore, activePlayer, dice;
@@ -17,29 +21,69 @@ scores = [0, 0];
 roundScore = 0;
 activePlayer = 0;
 
-function setActivePlayer() {
-  this.activePlayer = player;
-}
-
-function getActivePLayer() {
-  return this.activePlayeractivePlayer;
-}
-
+//Helper functions
 function generateDice() {
-  diceValue = Math.floor(Math.random() * 6) + 1;
-  console.log("Dice value: " + diceValue);
+  dice = Math.floor(Math.random() * 6) + 1;
 }
 
-function showRoundScore() {
-  document.querySelector("#current-" + activePlayer).innerHTML =
-    "<em>" + diceValue + "</em>";
+function displayGlobalProperties() {
+  roundScore = 0;
+  activePlayer = 0;
+  diceImg.style.display = "none";
+  document.getElementById("score-0").textContent = "0";
+  document.getElementById("score-1").textContent = "0";
+  document.getElementById("current-0").textContent = "0";
+  document.getElementById("current-1").textContent = "0";
 }
+
+function displayRoundSCore() {
+  document.querySelector("#current-" + activePlayer).innerHTML =
+    "<em>" + roundScore + "</em>";
+}
+
+function updateRoundScore() {
+  console.log("previous RoundScore:" + roundScore);
+  roundScore += dice;
+  console.log("dice roll:" + dice);
+  console.log("After RoundScore:" + roundScore);
+}
+
+function nextPlayer() {
+  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+  roundScore = 0;
+  console.log("dice roll:" + dice);
+  console.log("chabnged active player");
+  displayRoundSCore();
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  document.querySelector(".player-1-panel").classList.toggle("active");
+  diceImg.style.display = "none";
+}
+
+/****************************************************************************/
+
+//action functions
+newBtn.addEventListener("click", function () {
+  displayGlobalProperties();
+});
 
 rollBtn.addEventListener("click", function () {
-  var diceImg = document.querySelector(".dice");
-  diceImg.style.display = "none";
   generateDice();
-  showRoundScore();
   diceImg.style.display = "block";
-  diceImg.src = "images/dice-" + diceValue + ".png";
+  diceImg.src = "images/dice-" + dice + ".png";
+
+  if (dice !== 1) {
+    updateRoundScore();
+    displayRoundSCore();
+  } else {
+    nextPlayer();
+  }
 });
+
+holdBtn.addEventListener("click", function () {
+  scores[activePlayer] += roundScore;
+  document.getElementById("score-" + activePlayer).textContent =
+    scores[activePlayer];
+  console.log("SCore-" + activePlayer + ":" + scores[activePlayer]);
+});
+
+displayGlobalProperties();
