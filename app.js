@@ -51,6 +51,8 @@ function updateRoundScore() {
 function nextPlayer() {
   activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
   roundScore = 0;
+  document.getElementById("curent-0").textContent = "0";
+  document.getElementById("curent-1").textContent = "0";
   console.log("dice roll:" + dice);
   console.log("chabnged active player");
   displayRoundSCore();
