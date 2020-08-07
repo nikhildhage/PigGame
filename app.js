@@ -10,23 +10,54 @@
  */
 
 //selected elements
-var rollBtn = document.querySelector(".btn-roll");
-var newBtn = document.getElementById("new");
-var holdBtn = document.getElementById("hold");
-var diceImg = document.querySelector(".dice");
+var rollBtn = getHandle("rollDice");
+var newBtn = getHandle("new");
+var holdBtn = getHandle("hold");
+var diceImg = getHandle("dice");
 
 // variables
 var scores, roundScore, activePlayer, dice;
-scores = [0, 0];
+
 roundScore = 0;
 activePlayer = 0;
+
+/*****************************************************************************/
+//Getters and setters
+function getHandle(handle) {
+  console.log("calling handle function ");
+  console.log(handle);
+  return document.getElementById(handle);
+}
+
+function getRoundScore() {
+  return roundScore;
+}
+
+function getGlobalScore(activePlayer) {
+  return scores[activePlayer];
+}
+
+function getActivePlayer() {
+  return activePlayer;
+}
+
+function setRoundScore(data) {
+  roundScore = data;
+}
+
+function setActivePlayer(playerId) {
+  activePlayer = playerId;
+}
+
+/*********************************************************************************/
 
 //Helper functions
 function generateDice() {
   dice = Math.floor(Math.random() * 6) + 1;
 }
 
-function displayGlobalProperties() {
+function init() {
+  scores = [0, 0];
   roundScore = 0;
   activePlayer = 0;
   diceImg.style.display = "none";
@@ -51,8 +82,8 @@ function updateRoundScore() {
 function nextPlayer() {
   activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
   roundScore = 0;
-  document.getElementById("curent-0").textContent = "0";
-  document.getElementById("curent-1").textContent = "0";
+  document.getElementById("current-0").textContent = "0";
+  document.getElementById("current-1").textContent = "0";
   console.log("dice roll:" + dice);
   console.log("chabnged active player");
   displayRoundSCore();
@@ -63,9 +94,11 @@ function nextPlayer() {
 
 /****************************************************************************/
 
+init();
+
 //action functions
 newBtn.addEventListener("click", function () {
-  displayGlobalProperties();
+  init();
 });
 
 rollBtn.addEventListener("click", function () {
@@ -87,5 +120,3 @@ holdBtn.addEventListener("click", function () {
     scores[activePlayer];
   console.log("SCore-" + activePlayer + ":" + scores[activePlayer]);
 });
-
-displayGlobalProperties();
