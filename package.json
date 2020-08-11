@@ -1,0 +1,27 @@
+{
+  "name": "piggame",
+  "version": "1.0.0",
+  "description": "A two player game played with dice",
+  "main": "index.html",
+  "scripts": {
+    "start": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikhildhage/PigGame.git"
+  },
+  "keywords": [
+    "node",
+    "npm"
+  ],
+  "author": "Nikhil Dhage",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikhildhage/PigGame/issues"
+  },
+  "homepage": "https://github.com/nikhildhage/PigGame#readme",
+  "dependencies": {
+    "lite-server": "^2.5.4"
+  }
+}

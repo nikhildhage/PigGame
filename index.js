@@ -11,29 +11,29 @@
 
 //selected elements
 
-var rollBtn = getHandle("rollDice", handle);
-var newBtn = getHandle("new", handle);
-var holdBtn = getHandle("hold", handle);
-var diceImg = getHandle("dice", handle);
+const rollBtn = getHandle("rollDice", handle);
+const newBtn = getHandle("new", handle);
+const holdBtn = getHandle("hold", handle);
+const diceImg = getHandle("dice", handle);
 
 // variables
 var scores, roundScore, activePlayer, dice;
 scores = [0, 0];
 roundScore = 0;
 activePlayer = 0;
-var pigGame = new Game();
-console.log(pigGame);
+
 /*****************************************************************************/
 //Getters and setters
 
+init();
+
 function handle(id) {
-  console.log(id);
   return id;
 }
 
 function getHandle(id, fn) {
-  console.log("calling handle function ");
-  console.log(handle);
+  console.log("calling handle function: " + id);
+
   return document.getElementById(fn(id));
 }
 
@@ -69,6 +69,7 @@ function init() {
   roundScore = 0;
   activePlayer = 0;
   diceImg.style.display = "none";
+
   document.getElementById("score-0").textContent = "0";
   document.getElementById("score-1").textContent = "0";
   document.getElementById("current-0").textContent = "0";
@@ -101,8 +102,6 @@ function nextPlayer() {
 }
 
 /****************************************************************************/
-
-init();
 
 //action functions
 newBtn.addEventListener("click", function () {
