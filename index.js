@@ -11,8 +11,6 @@
 
 //selected elements
 
-import { Game } from "./js/Game.js";
-
 var rollBtn = getHandle("rollDice", handle);
 var newBtn = getHandle("new", handle);
 var holdBtn = getHandle("hold", handle);
