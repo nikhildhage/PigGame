@@ -9,93 +9,29 @@
   
  */
 
-//selected elements
-
-const rollBtn = getHandle("rollDice", handle);
-const newBtn = getHandle("new", handle);
-const holdBtn = getHandle("hold", handle);
-const diceImg = getHandle("dice", handle);
+//selected elements and imports
+import Game from "./js/game.js";
+import { rollBtn, newBtn, holdBtn, diceImg } from "./js/util.js";
 
 // variables
-var scores, roundScore, activePlayer, dice;
-scores = [0, 0];
-roundScore = 0;
-activePlayer = 0;
-
+var game = new Game();
+console.log(game);
 /*****************************************************************************/
-//Getters and setters
-
-init();
-
-function handle(id) {
-  return id;
-}
-
-function getHandle(id, fn) {
-  console.log("calling handle function: " + id);
-
-  return document.getElementById(fn(id));
-}
-
-function getRoundScore() {
-  return roundScore;
-}
-
-function getGlobalScore(activePlayer) {
-  return scores[activePlayer];
-}
-
-function getActivePlayer() {
-  return activePlayer;
-}
-
-function setRoundScore(data) {
-  roundScore = data;
-}
-
-function setActivePlayer(playerId) {
-  activePlayer = playerId;
-}
 
 /*********************************************************************************/
-
+game.init();
 //Helper functions
-function generateDice() {
-  dice = Math.floor(Math.random() * 6) + 1;
-}
-
-function init() {
-  scores = [0, 0];
-  roundScore = 0;
-  activePlayer = 0;
-  diceImg.style.display = "none";
-
-  document.getElementById("score-0").textContent = "0";
-  document.getElementById("score-1").textContent = "0";
-  document.getElementById("current-0").textContent = "0";
-  document.getElementById("current-1").textContent = "0";
-}
-
-function displayRoundSCore() {
-  document.querySelector("#current-" + activePlayer).innerHTML =
-    "<em>" + roundScore + "</em>";
-}
-
-function updateRoundScore() {
-  console.log("previous RoundScore:" + roundScore);
-  roundScore += dice;
-  console.log("dice roll:" + dice);
-  console.log("After RoundScore:" + roundScore);
-}
-
+//set up gameBoard and set activePlayer
 function nextPlayer() {
-  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-  roundScore = 0;
+  game.getActivePlayer() === 0
+    ? game.setActivePlayer(1)
+    : game.setActivePlayer(0);
+  game.setRoundScore(0);
   document.getElementById("current-0").textContent = "0";
   document.getElementById("current-1").textContent = "0";
-  console.log("dice roll:" + dice);
-  console.log("chabnged active player");
-  displayRoundSCore();
+  console.log("dice roll:" + game.dice);
+  console.log("chabnged active player to:" + game.getActivePlayer());
+  game.displayRoundSCore();
   document.querySelector(".player-0-panel").classList.toggle("active");
   document.querySelector(".player-1-panel").classList.toggle("active");
   diceImg.style.display = "none";
@@ -103,27 +39,55 @@ function nextPlayer() {
 
 /****************************************************************************/
 
-//action functions
+//controller functions
+
+//Fire new game event
+//Event: clear game board and starts a new game when new game button is clicked
 newBtn.addEventListener("click", function () {
-  init();
+  game.init();
+  console.log(game);
 });
 
+//Fire rollDice event
+//Event: Displays dice image and performs an action when roll dice button is clicked
 rollBtn.addEventListener("click", function () {
-  generateDice();
+  game.generateDice();
   diceImg.style.display = "block";
-  diceImg.src = "images/dice-" + dice + ".png";
+  diceImg.src = "images/dice-" + game.dice + ".png";
 
-  if (dice !== 1) {
-    updateRoundScore();
-    displayRoundSCore();
+  //end active player's turn and change activePLayer
+  if (game.dice !== 1) {
+    game.updateRoundScore();
+    game.displayRoundSCore();
   } else {
     nextPlayer();
   }
 });
 
+//Fire hold click event
+//Event: calculate , save adn display globalScore
+
 holdBtn.addEventListener("click", function () {
-  scores[activePlayer] += roundScore;
-  document.getElementById("score-" + activePlayer).textContent =
-    scores[activePlayer];
-  console.log("SCore-" + activePlayer + ":" + scores[activePlayer]);
+  //current global score = previous global score + current roundScore
+  let globalScore = game.getGlobalScore() + game.getRoundScore();
+  game.setGlobalScore(globalScore);
+
+  //console.log((globalScore = globalScore + "+" + game.getRoundScore()));
+  document.getElementById(
+    "score-" + game.getActivePlayer()
+  ).textContent = game.getGlobalScore();
+
+  if (game.getGlobalScore() >= 30) {
+    document.getElementById("name-" + game.getActivePlayer()).textContent =
+      "Winner";
+    document
+      .querySelector(".player-" + game.getActivePlayer() + "-panel")
+      .classList.add("winner");
+
+    document
+      .querySelector(".player-" + game.getActivePlayer() + "-panel")
+      .classList.remove("active");
+  } else {
+    nextPlayer();
+  }
 });
