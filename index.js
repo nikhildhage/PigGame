@@ -10,7 +10,7 @@
  */
 
 //selected elements and imports
-import Game from "./js/game.js";
+import { Game, gamePlaying } from "./js/game.js";
 import { rollBtn, newBtn, holdBtn, diceImg } from "./js/util.js";
 
 // variables
@@ -51,16 +51,19 @@ newBtn.addEventListener("click", function () {
 //Fire rollDice event
 //Event: Displays dice image and performs an action when roll dice button is clicked
 rollBtn.addEventListener("click", function () {
-  game.generateDice();
-  diceImg.style.display = "block";
-  diceImg.src = "images/dice-" + game.dice + ".png";
+  if (gamePlaying) {
+    console.log("playing game");
+    game.generateDice();
+    diceImg.style.display = "block";
+    diceImg.src = "images/dice-" + game.dice + ".png";
 
-  //end active player's turn and change activePLayer
-  if (game.dice !== 1) {
-    game.updateRoundScore();
-    game.displayRoundSCore();
-  } else {
-    nextPlayer();
+    //end active player's turn and change activePLayer
+    if (game.dice !== 1) {
+      game.updateRoundScore();
+      game.displayRoundSCore();
+    } else {
+      nextPlayer();
+    }
   }
 });
 
@@ -68,26 +71,31 @@ rollBtn.addEventListener("click", function () {
 //Event: calculate , save adn display globalScore
 
 holdBtn.addEventListener("click", function () {
-  //current global score = previous global score + current roundScore
-  let globalScore = game.getGlobalScore() + game.getRoundScore();
-  game.setGlobalScore(globalScore);
+  if (gamePlaying) {
+    console.log("playing game");
+    //current global score = previous global score + current roundScore
+    let globalScore = game.getGlobalScore() + game.getRoundScore();
+    game.setGlobalScore(globalScore);
 
-  //console.log((globalScore = globalScore + "+" + game.getRoundScore()));
-  document.getElementById(
-    "score-" + game.getActivePlayer()
-  ).textContent = game.getGlobalScore();
+    //console.log((globalScore = globalScore + "+" + game.getRoundScore()));
+    document.getElementById(
+      "score-" + game.getActivePlayer()
+    ).textContent = game.getGlobalScore();
 
-  if (game.getGlobalScore() >= 30) {
-    document.getElementById("name-" + game.getActivePlayer()).textContent =
-      "Winner";
-    document
-      .querySelector(".player-" + game.getActivePlayer() + "-panel")
-      .classList.add("winner");
+    if (game.getGlobalScore() >= 30) {
+      document.getElementById("name-" + game.getActivePlayer()).textContent =
+        "Winner";
+      document
+        .querySelector(".player-" + game.getActivePlayer() + "-panel")
+        .classList.add("winner");
 
-    document
-      .querySelector(".player-" + game.getActivePlayer() + "-panel")
-      .classList.remove("active");
-  } else {
-    nextPlayer();
+      document
+        .querySelector(".player-" + game.getActivePlayer() + "-panel")
+        .classList.remove("active");
+      gamePlaying = false;
+      console.log("game has stopped");
+    } else {
+      nextPlayer();
+    }
   }
 });

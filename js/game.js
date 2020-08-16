@@ -1,6 +1,6 @@
 import { diceImg } from "./util.js";
 
-class Game {
+export class Game {
   constructor() {
     this.scores = [0, 0];
     this.roundScore = 0;
@@ -69,4 +69,4 @@ class Game {
   }
 }
 
-export default Game;
+export var gamePlaying;
